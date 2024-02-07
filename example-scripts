@@ -1,0 +1,1518 @@
+Content from https://learn.acloud.guru
+The System Administrator's Guide to Bash Scripting
+Mon Jan 22 19:44:44 EST 2024
+
+List of .sh files in /home/cloud_user/bin/:
+
+Dec 31 test.sh
+Dec 31 env.sh
+Dec 31 varexample.sh
+Dec 31 comments.sh
+Dec 31 substitution.sh
+Jan 1 errors-keep-moving.sh
+Jan 1 errors-exit.sh
+Jan 1 arithmetic.sh
+Jan 1 null.sh
+Jan 1 readsample.sh
+Jan 5 array-example.sh
+Jan 6 cmdline-var.sh
+Jan 6 simple-if.sh
+Jan 6 test-if-file.sh
+Jan 6 if-expression.sh
+Jan 6 if-then-else.sh
+Jan 6 if-elif-else.sh
+Jan 7 for-sample.sh
+Jan 7 case-sample.sh
+Jan 7 while-sample.sh
+Jan 7 execops.sh
+Jan 8 readfile.sh
+Jan 8 IFS-delimiter.sh
+Jan 11 trap-example.sh
+Jan 12 filedescriptor.sh
+Jan 12 debug-readfile.sh
+Jan 13 error-exit.sh
+Jan 13 simple-function.sh
+Jan 13 function-structure.sh
+Jan 13 cat-all-dot-sh.sh
+Jan 14 var-scope.sh
+Jan 14 factorial-array.sh
+Jan 14 func-parameters.sh
+Jan 14 func-nested.sh
+Jan 15 return-val.sh
+Jan 16 simple-info-box.sh
+Jan 16 simple-message-box.sh
+Jan 20 simple-dialog.sh
+Jan 20 input-box.sh
+Jan 20 override.sh
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/test.sh
+Dec 31
+#########################################
+#########################################
+
+#!/bin/bash
+
+clear
+
+echo "Hello testing 123"
+
+echo "Sleeping for 5"
+
+sleep 5
+
+clear
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/env.sh
+Dec 31
+#########################################
+#########################################
+
+#!/bin/bash
+
+clear
+
+echo "Give env info"
+echo "+++++++++++++++++++++++++++++++"
+echo
+echo "Hello user: $USER"
+echo
+echo "Your home dir is: $HOME"
+echo
+echo "Your History file file will ignore: $HISTCONTROL"
+echo
+echo "Your Terminal Session type is: $TERM"
+echo
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/varexample.sh
+Dec 31
+#########################################
+#########################################
+
+#!/bin/bash
+
+MYUSERNAME="username"
+MYPASSWORD="password123"
+STARTOFSCRIPT=`date`
+
+echo -e "\nMy login name for this application is:\t$MYUSERNAME"
+echo -e "My login password is:\t\t\t$MYPASSWORD"
+echo -e "I executed this script at:\t\t$STARTOFSCRIPT"
+
+sleep 5
+
+ENDOFSCRIPT=`date`
+
+echo -e "This script completed at:\t\t$ENDOFSCRIPT\n"
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/comments.sh
+Dec 31
+#########################################
+#########################################
+
+#!/bin/bash
+
+#this line is intended as a general description of the script
+
+# Comment up your blocks of script
+
+clear	#you can even add comments in line
+
+#MYUSERNAME="Alex"	#the username for this application
+
+MYUSERNAME="Billy"	#username added later
+
+echo "We just added a username, $MYUSERNAME."
+
+DATETIMESTAMP=`date`
+
+echo "This is when the script was run: $DATETIMESTAMP"	#this is the timestamp of run
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/substitution.sh
+Dec 31
+#########################################
+#########################################
+
+#!/bin/bash
+
+#this script is intended to show how to do simple substitution
+
+clear
+
+#do it with variables
+#Notice the commands when setting the variables have to be inside of $()
+
+TODAYSDATE=$(date)
+USERFILES=$(find /home -user $USER)
+
+echo "Today's date: $TODAYSDATE"
+echo "All files owned by $USER: $USERFILES"
+
+
+#do it with aliases
+#notice the alias (in the final echos) have to be in $(), because an alias is a command
+
+shopt -s expand_aliases
+
+alias TODAY="date"
+alias UFILES="find /home -user $USER"
+
+echo -e "\n\n##########\nWith Alias, TODAY is: $(TODAY)"
+echo -e "\nWith Alias, UFILES is:\n$(UFILES)\n" 
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/errors-keep-moving.sh
+Jan 1
+#########################################
+#########################################
+
+#!/bin/bash
+
+#this is to show exit types
+
+clear
+
+echo -e "\nDo some math"
+expr 1 + 5
+echo "Status code: $?"
+
+echo -e "\ncreate a file 'noodles.sh'"
+touch noodles.sh
+echo "Status code: $?"
+
+echo -e "\nremove the file 'noodles.sh' twice, should fail on second rm"
+rm noodles.sh
+echo "'noodles.sh' has been removed, now try it the second time"
+rm noodles.sh
+echo -e "Status code: $?\nThe script still continues, even though this command errored out"
+
+echo -e "\nAnother successfull command (this echo, actually)"
+echo -e "Status code: $?"
+
+echo
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/errors-exit.sh
+Jan 1
+#########################################
+#########################################
+
+#!/bin/bash
+
+#this is to show exit types
+
+clear
+
+#the moment there is an error, exit the shell (aka end the script)
+set -e
+
+echo -e "\nDo some math"
+expr 1 + 5
+echo "Status code: $?"
+
+echo -e "\ncreate a file 'noodles.sh'"
+touch noodles.sh
+echo "Status code: $?"
+
+echo -e "\nremove the file 'noodles.sh' twice, should fail on second rm"
+rm noodles.sh
+echo -e "'noodles.sh' has been removed, now try it the second time.\nThis is where the script will error out and quit.\n"
+rm noodles.sh
+echo -e "Status code: $?\n"
+
+echo -e "\nAnother successfull command (this echo, actually)"
+echo -e "Status code: $?"
+
+echo
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/arithmetic.sh
+Jan 1
+#########################################
+#########################################
+
+#!/bin/bash
+
+#more versitile, not just integers
+perl -e 'print 23 / 4'; echo
+
+#expr only does integer math, and only gives whole number output.
+#expr will do modular math though, to get the remainder. Just no decimals
+echo -e "$(expr 23 / 4) remainder $(expr 23 % 4)"
+
+#regroup for different order of operations. 
+#Some characters have to be escaped
+expr 2 + 2 \* 4
+expr \( 2 + 2 \) \* 4
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/null.sh
+Jan 1
+#########################################
+#########################################
+
+#!/bin/bash
+
+#redirect to /dev/null example
+
+echo "This goes to the console"
+
+echo "This goes to /dev/null" >> /dev/null
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/readsample.sh
+Jan 1
+#########################################
+#########################################
+
+#!/bin/bash
+
+#interactive script for user input
+
+echo -e "\nYour responses will not show as you type them.\n"
+
+read -p "Enter your first name: " -s FIRST
+echo
+read -p "Enter your last name: " -s LAST
+echo
+read -p "Enter your age: " -s AGE
+
+echo -e "\n\nHello, ${FIRST} ${LAST}.\nIn 10 years, you will be $(expr ${AGE} + 10 ).\n"
+
+unset FIRST
+unset LAST
+unset AGE
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/array-example.sh
+Jan 5
+#########################################
+#########################################
+
+#!/bin/bash
+
+#simple array 
+
+SERVERLIST=("srvr1" "srvr2" "srvr3" "srvr4")
+
+COUNT=0
+
+for INDEX in ${SERVERLIST[@]}
+do
+	echo "Processing Server: ${SERVERLIST[${COUNT}]}"
+	#COUNT="$(expr ${COUNT} + 1)"
+	#COUNT="$((${COUNT}+1))"
+	COUNT=$((${COUNT}+1))
+done
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/cmdline-var.sh
+Jan 6
+#########################################
+#########################################
+
+#!/bin/bash
+
+#demo of command line variables into a shell script
+
+USER=$1
+PASS=$2
+NOTE=$3
+
+echo -e "\nThe following item was passed into the script  at runtime:\n"
+
+echo -e "Username entered:\t$USER"
+echo -e "Password entered:\t$PASS"
+echo -e "Note entered:\t\t$NOTE\n"
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/simple-if.sh
+Jan 6
+#########################################
+#########################################
+
+#!/bin/bash
+
+#simple if for guessing a number
+
+BREAK="#########################"
+
+echo -e "\nGuess the secret number\n${BREAK}\n"
+
+echo -e "Enter a number between 1 and 5: "
+
+read GUESS
+
+if [ ${GUESS} -eq 3 ]
+then
+	echo -e "\nYou guessed the correct value: ${GUESS}\n\n${BREAK}\n"
+fi
+
+if [ ${GUESS} -ne 3 ]
+then
+	echo -e "\n${GUESS} is not correct.\n\n${BREAK}\n"
+fi
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/test-if-file.sh
+Jan 6
+#########################################
+#########################################
+
+#!/bin/bash
+
+#test if a file exists
+
+BREAK="#######################"
+FILENAME=$1
+
+echo -e "\nTesting for the existence of a file named ${FILENAME}\n${BREAK}\n"
+
+if [ -a ${FILENAME} ]
+then
+	echo -e "${FILENAME} does exist. See details below:\n$(ls -la ${FILENAME})\n"
+fi
+
+if [ ! -a ${FILENAME} ]
+then
+	echo -e "${FILENAME} does NOT exist.\nHere are the files that do exist in $(pwd):\n\n$(ls)\n"
+fi
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/if-expression.sh
+Jan 6
+#########################################
+#########################################
+
+#!/bin/bash
+
+#test multiple expressions in an if statement
+
+clear
+
+FILENAME=$1
+BREAK="#################################"
+
+echo -e "\ntesting for existence and readbility of ${FILENAME}.\n\n${BREAK}\n"
+
+if [ -f ${FILENAME} ] && [ -r ${FILENAME} ]
+then
+	echo -e "\nFile ${FILENAME} exists and is readable.\n\n${BREAK}\n\n"
+fi
+
+if [ ! -f ${FILENAME} ]
+then
+	echo -e "${FILENAME} does NOT exist and/or is not readable.\nHere are the permissions for files that do exist in $(pwd):\n\n$(ls -ltr)\n"
+fi
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/if-then-else.sh
+Jan 6
+#########################################
+#########################################
+
+#!/bin/bash
+
+#a script to illustrate if/then/else and nested if statements
+
+BREAK="###################"
+
+echo -e "Enter a number from 1 to 10: "
+read VALUE
+
+#the 2>/dev/null makes errors (such as entering a string) not display on the terminal output
+
+if [ "${VALUE}" -gt "0" ] 2>/dev/null && [ ${VALUE} -lt "11" ] 2>/dev/null
+then
+	echo -e "You entered ${VALUE}, which is from 1 to 10."
+
+else
+	echo -e "You entered ${VALUE}, which is not from 1 to 10."
+	
+fi
+
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/if-elif-else.sh
+Jan 6
+#########################################
+#########################################
+
+#!/bin/bash
+
+#a script to illustrate if/elif/else and nested if statements
+
+BREAK="###################"
+
+echo -e "Enter a number from 1 to 10: "
+read VALUE
+
+if [ "${VALUE}" -eq "3" ] 2>/dev/null
+then
+	echo -e "You entered ${VALUE}, which is from 1 to 10, and also happens to be my favorite number."
+
+elif [ "${VALUE}" -gt "0" ] 2>/dev/null && [ ${VALUE} -lt "11" ] 2>/dev/null
+then
+	echo -e "You entered ${VALUE}, which is from 1 to 10."
+	
+elif [ "${VALUE}" -eq "13" ] 2>/dev/null
+then
+	echo -e "You entered ${VALUE}, which is not from 1 to 10, and is also an unlucky number."
+
+else
+	echo -e "You entered ${VALUE}, which is not from 1 to 10."
+	
+fi
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/for-sample.sh
+Jan 7
+#########################################
+#########################################
+
+#!/bin/bash
+
+#this is a demo of a for loop
+
+SHELLSCRIPTS=$(ls -tr | grep ".sh")
+
+echo  -e "List all shell scripts in the directory:\n${SHELLSCRIPTS}"
+
+for SCRIPT in ${SHELLSCRIPTS}
+do
+	echo -e "\n################\nFile: ${SCRIPT}\n\nContents:\n\n"
+	cat ${SCRIPT}
+	echo -e "\n"
+done
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/case-sample.sh
+Jan 7
+#########################################
+#########################################
+
+#!/bin/bash
+
+#demo of the case statement
+
+clear
+
+BREAK="#########################\n"
+
+echo -e "MAIN MENU:\n${BREAK}"
+
+echo -e "1) Choice 1\n2) Choice 2\n3) Choice 3\n\nEnter Choice: "
+
+read MENUCHOICE
+
+echo -e "\n-----\nYou chose ${MENUCHOICE}\n"
+
+case ${MENUCHOICE} in
+
+	1) echo -e "Congrats for chosing option ${MENUCHOICE}.\n"
+	;;
+	
+	2) echo -e "Option ${MENUCHOICE} is a great one!\n"
+	;;
+	
+	3) echo -e "I would have gone with option ${MENUCHOICE} as well.\n"
+	;;
+	
+	*) echo -e "${MENUCHOICE} is not an option. Choose from the above options.\n"
+	;;
+
+esac
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/while-sample.sh
+Jan 7
+#########################################
+#########################################
+
+#!/bin/bash
+
+#while loop example
+
+clear
+
+echo -e "How many times do you want to show "Hello World"?"
+
+read MANY
+
+#while [ ${MANY} -gt 0 ]
+#do
+#	echo -e "Hello World - ${MANY}"
+#	MANY=$(( ${MANY} - 1 ))
+#done
+
+COUNT=1
+
+while [ ${COUNT} -le ${MANY} ]
+do
+	echo -e "Hello World\t${COUNT}"
+	#COUNT=$((${COUNT}+1))
+	#let COUNT+=1
+	#let "COUNT++"
+	let "++COUNT"
+done
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/execops.sh
+Jan 7
+#########################################
+#########################################
+
+#!/bin/bash
+
+#execution operators example
+
+clear
+
+read -p "Enter a number from 1 to 5: " VALUE
+
+echo -e "You entered ${VALUE}."
+
+if [ ${VALUE} -lt "1" ] || [ ${VALUE} -gt "5" ]
+	echo -e "${VALUE} is out of range."
+
+elif [ ${VALUE} -eq "1" ] || [ ${VALUE} -eq "3" ] || [ ${VALUE} -eq "5" ]
+then
+	echo -e "${VALUE} is an odd number."
+
+else
+	echo -e "${VALUE} is an even number."
+
+fi
+
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/readfile.sh
+Jan 8
+#########################################
+#########################################
+
+#!/bin/bash
+
+#simple script to read a file
+
+read -p "Enter a filename to read: " FILE
+
+while read -r SUPERHERO
+do
+	echo -e "Superhero Name: ${SUPERHERO}"
+done < "$FILE"
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/IFS-delimiter.sh
+Jan 8
+#########################################
+#########################################
+
+#!/bin/bash
+
+#delimiter example using IFS
+
+echo "Enter filename to parse: "
+read FILE
+
+echo "Enter the delimiter: "
+read DELIM
+
+IFS="$DELIM"
+
+while read -r CPU MEMORY DISK; do
+	echo "CPU: $CPU"
+	echo "Memory: $MEMORY"
+	echo "Disk: $DISK"
+done <"$FILE"
+
+
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/trap-example.sh
+Jan 11
+#########################################
+#########################################
+
+#!/bin/bash
+
+#example of trapping events and limiting the shell stopping
+
+clear
+
+trap 'echo " - Please press Q to exit."' SIGINT SIGTERM SIGTSTP
+
+while [ "${CHOICE}" != "Q" ] && [ "${CHOICE}" != "q" ]
+do
+	echo -e "\nMAIN MENU\n==============\n"
+	echo "1) Choice ONE"
+	echo "2) Choice TWO"
+	echo "3) Choice THREE"
+	echo -e "\n----------------\nQ/q:\tEXIT\n----------------\n"
+	read -p "Choose from the options above: " CHOICE
+	clear
+
+done
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/filedescriptor.sh
+Jan 12
+#########################################
+#########################################
+
+#!/bin/bash
+
+#demo of reading and writing to a file using a file descriptor
+
+read -p "Enter a filename to read: " FILE
+
+exec 5<>${FILE}
+
+while read SUPERHERO
+do
+	echo "Superhero name: ${SUPERHERO}"
+done <&5
+
+echo "$(pwd)/filedescriptor.sh was run ${FILE} on $(date) by $(echo ${USER})." >&5
+
+exec 5>&-
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/debug-readfile.sh
+Jan 12
+#########################################
+#########################################
+
+#!/bin/bash
+
+#simple script to read a file
+
+read -p "Enter a filename to read: " FILE
+
+#start debug
+
+set -x
+
+while read -r SUPERHERO
+do
+	echo -e "Superhero Name: ${SUPERHERO}"
+done < "$FILE"
+
+#stop debug
+
+set +x
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/error-exit.sh
+Jan 13
+#########################################
+#########################################
+
+#!/bin/bash
+
+#demo of using error handling with exit
+
+echo "Change to a dir and list contents."
+
+DIR=$1
+
+cd ${DIR} 2>/dev/null
+
+if [ "$?" = "0" ]
+then
+
+	echo "Changed into directory: $(pwd)"
+	ls
+
+else
+
+	echo "Cannot cd to ${DIR}, please try again."
+	exit 1
+
+fi
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/simple-function.sh
+Jan 13
+#########################################
+#########################################
+
+#!/bin/bash
+
+#example of a simple bash function
+
+#before function
+echo "This is before the function"
+
+#define the function:
+funcExample () {
+
+echo "This is my function, named funcExample"
+
+}
+
+#call the function:
+funcExample
+
+#after function
+echo "The function was called, and now we are at the end of the script."
+
+
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/function-structure.sh
+Jan 13
+#########################################
+#########################################
+
+#!/bin/bash
+
+#demo of functions within a shell script structure
+
+###################
+#variables section:
+###################
+
+CMDLINE=$1
+COMMAND=$0
+
+##############################
+#function definitions section:
+##############################
+
+#This function displays a message:
+funcExample1 () {
+
+echo -e "This is an example function, named funcExample1\n"
+
+}
+
+#this function displays another message:
+funcExample2 () {
+
+echo -e "This is another example function, named funcExample2"
+echo -e "The command that was just now executed was:\n${COMMAND} ${CMDLINE}\n"
+
+}
+
+
+############################
+#beginning of script section
+############################
+
+clear
+
+echo -e "\nThis is where the script section actually begins\n"
+
+#call the functions:
+echo -e "\nHere are my functions being called:\n"
+
+funcExample1
+
+funcExample2
+
+echo -e "This is after the functions were called\n"
+
+
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/cat-all-dot-sh.sh
+Jan 13
+#########################################
+#########################################
+
+#!/bin/bash
+
+clear
+
+OUTFILE=all-scripts.txt
+DIV="#########################################"
+
+rm -f ${OUTFILE}
+
+echo -e "\nContent from https://learn.acloud.guru\nThe System Administrator's Guide to Bash Scripting\n$(date)\n\nList of .sh files in $(pwd)/:\n\n$(ls -ltr | awk '{ print $6 " " $7 " " $9}' | grep ".sh")\n" >> ${OUTFILE}
+
+for FILE in $(ls -tr | grep ".sh")
+do
+	echo -e "\n${DIV}\n${DIV}\nFile $(pwd)/${FILE}\n$(ls -ltr ${FILE} | awk '{ print $6 " " $7 }')\n${DIV}\n${DIV}\n" >> ${OUTFILE}
+	cat ${FILE} >> ${OUTFILE}
+	echo -e "\n\n" >> ${OUTFILE}
+done
+
+echo -e "\n\n"
+
+clear
+
+echo -e "\n${DIV}\n\nReview scripts by running:\n\n\t'cat $(pwd)/${OUTFILE}'\n\n${DIV}\n"
+
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/var-scope.sh
+Jan 14
+#########################################
+#########################################
+
+#!/bin/bash
+
+#demonstrating variable scope
+
+#global var declaration
+
+
+####################
+# GLOBAL VARIABLES #
+# SECTION          #
+####################
+
+GLOBALVAR="***Globally Visible***"
+
+
+#####################
+# FUNCTIONS SECTION #
+#####################
+
+functExample () {
+
+	####################
+	# LOCAL FUNCT VARS #
+	####################
+
+	LOCALVAR="***Locally visible***"
+	echo "From within the function, the variable is ${LOCALVAR}"
+
+}
+
+
+##################
+# SCRIPT SECTION #
+##################
+
+clear
+
+echo -e "This step happens first\n\n"
+echo -e "GLOBALVAR variable = ${GLOBALVAR} - before function call\n\n"
+echo -e "LOCALVAR variable = ${LOCALVAR} - before function call\n\n"
+
+echo -e "Calling function:\nfunctExample()\n\n"
+
+functExample
+
+echo -e "Function has been called:\n\n"
+
+echo -e "GLOBALVAR variable = ${GLOBALVAR} - after function call\n\n"
+echo -e "LOCALVAR variable = ${LOCALVAR} - after function call\n\n"
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/factorial-array.sh
+Jan 14
+#########################################
+#########################################
+
+#!/bin/bash
+
+#calculate the factorial of an integer, using arrays
+
+#f=1; for k in {1..10}; do f=$[$k * $f] ; done; echo $f
+
+############################
+# GLOBAL VARIABLES SECTION #
+############################
+
+F=1
+END=$1
+
+##################
+# SCRIPT SECTION #
+##################
+
+for K in {1..$END}
+do
+	F=$[${K} * ${F}]
+done
+
+echo ${F}
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/func-parameters.sh
+Jan 14
+#########################################
+#########################################
+
+#!/bin/bash
+
+#example of parameters in from the command line
+#aka "functional parameter passing"
+
+# VARIABLE SECTION #
+#####################
+
+USERNAME=$1
+
+
+# FUNCTION SECTION #
+####################
+
+#calculate days in age:
+funcAgeInDays () {
+
+#Global variable USERNAME was what was typed into the teminal when running the command
+#function variable (or parameter?) USERAGE was set when script was run, and it was typed into the prompt
+
+	echo "Hello $USERNAME, you are $1 Years old."
+	echo "That makes you approximately $(( $1 * 365 )) days old."
+
+}
+
+
+# SCRIPT SECTION #
+##################
+
+clear
+
+#ask for and store age in years
+read -p "Enter your age: " USERAGE
+
+#calculate approx age in days
+funcAgeInDays $USERAGE
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/func-nested.sh
+Jan 14
+#########################################
+#########################################
+
+#!/bin/bash
+
+#demonstrate the use of nested functions
+
+
+# VARIBALE SECTION #
+####################
+
+#global variable
+GENDER=$1
+
+
+# FUNCTION SECTION #
+####################
+
+#create a human being
+funcHuman() {
+	ARMS=2
+	LEGS=2
+
+	funcMale() {
+		BEARD=1
+		
+		echo -e "This $GENDER has $ARMS arms, $LEGS legs and $BEARD beard.\n\n"	
+
+	}
+
+	funcFemale() {
+		BEARD=0
+
+		echo -e "This $GENDER has $ARMS arms, $LEGS legs, and $BEARD beard.\n\n"
+
+	}
+
+}
+
+
+# SCRIPT SECTION #
+##################
+
+clear
+
+echo -e "Determining the characteristics of the gender $GENDER.\n\n"
+
+if [ "$GENDER" == "male" ]
+then
+	funcHuman
+	funcMale
+
+elif [ "$GENDER" == "female" ]
+then
+	funcHuman
+	funcFemale
+
+else
+	echo -e "Must select either male or female.\n\n"
+
+fi
+
+
+
+
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/return-val.sh
+Jan 15
+#########################################
+#########################################
+
+#!/bin/bash
+
+#demo of return values and testing results
+
+####################
+# VARIABLE SECTION #
+####################
+
+NO=1
+YES=0
+FIRST=$1
+SECOND=$2
+THIRD=$3
+#FOURTH=$4
+
+
+
+####################
+# FUNCTION SECTION #
+####################
+
+#check command line parameters passed in
+
+funcParams () {
+
+	#did we get three parameters?
+	# ! -z means if it is not a null value
+	if [ ! -z "$THIRD" ]
+	then
+		echo "We got at least three parameters."
+		return $YES
+	else
+		echo "We got less than three parameters."
+		return $NO
+	fi
+
+}
+
+#did we get exactly three or not?
+
+funcThreeOrNah () {
+	if [ "$RETURN_VALS" -eq "$YES" ]
+	then
+		echo -e "We received three parameters, and they are:\nParam1=\t$FIRST\nParam2=\t$SECOND\nParam3=\t$THIRD"
+	else
+		echo -e "The script expects three parameters. See below...\n\n\tUSAGE:\treturnval.sh [param1] [param2] [param3]\n"
+		exit 1
+	fi
+
+}
+
+
+##################
+# SCRIPT SECTION #
+##################
+
+funcParams
+
+RETURN_VALS=$?
+
+funcThreeOrNah
+
+
+echo "The return value was $RETURN_VALS."
+
+
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/simple-info-box.sh
+Jan 16
+#########################################
+#########################################
+
+#!/bin/bash
+
+#script for simple info box with dialog and ncurses
+# sudo yum install dialog
+
+# VARIABLE SECTION #
+####################
+
+INFOBOX=${INFOBOX=dialog}
+TITLE="Default"
+MESSAGE="Something to say"
+XCOORD=10
+YCOORD=20
+
+
+# FUNCTION SECTION #
+####################
+
+#display the info box and our message
+#1 is the title, 2 is the message, 3 is x-coord, and 4 is y-coord
+funcDisplayInfoBox () {
+	$INFOBOX --title "$1" --infobox "$2" "$3" "$4"
+	sleep "$5"
+}
+
+
+# SCRIPT SECTION #
+##################
+
+if [ "$1" == "shutdown" ]
+then
+	funcDisplayInfoBox "!*!*!WARNING!*!*!" "We are SHUTTING DOWN the system!" "11" "21" "5"
+	echo "Shutting Down..."
+else
+	funcDisplayInfoBox "Information..." "You are not doing anything fun..." "11" "21" "5"
+	echo "Not doing anything"
+fi
+
+#script complete
+echo "Script complete"
+
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/simple-message-box.sh
+Jan 16
+#########################################
+#########################################
+
+#!/bin/bash
+
+###
+# VARIABLES #
+#############
+
+MSGBOX=${MSGBOX=dialog}
+TITLE="Default"
+MESSAGE="Some message"
+XCOORD=10
+YCOORD=20
+
+
+###
+# FUNCTIONS #
+#############
+
+#display message box with our message
+funcDisplayMsgBox () {
+	$MSGBOX --title "$1" --msgbox "$2" "$3" "$4"
+}
+
+
+###
+# SCRIPT #
+##########
+
+if [ "$1" == "shutdown" ]
+then
+	funcDisplayMsgBox "WARNING SHUTTING DOWN" "Please select OK when you're ready to shutdown."
+	echo "SHUTTING DOWN NOW"
+else
+	funcDisplayMsgBox "Boring..." "You arent doing anything fun..." "10" "20"
+	echo "Not doing anything. Back to normal..."
+fi
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/simple-dialog.sh
+Jan 20
+#########################################
+#########################################
+
+#1/bin/bash
+
+#demo of a dialog box that will display a menu
+
+
+###
+# VARIABLES SECTION #
+#####################
+
+MENUBOX=${MENUBOX=dialog}
+TEMPFILE=choice.txt
+
+###
+# FUNCTIONS SECTION #
+#####################
+
+#function to display simple menu
+#numbers at the end are height, width, number of choices available
+
+funcDisplayDialogMenu () {
+	$MENUBOX --title "[ --- M A I N   M E N U --- ]" --menu "Use UP/DOWN arrows or the number of your choice to select, then press ENTER." 15 45 4 1 "Display 'Hello World'" 2 "Display 'Goodbye World'" 3 "Display 'Nothing'" X "EXIT" 2>${TEMPFILE}
+}
+
+
+### 
+# SCRIPT SECTION #
+######################
+
+#call the menu
+
+funcDisplayDialogMenu
+
+case "$(cat choice.txt)" in
+	1) echo "Hello World";;
+	2) echo "Goodbye World";;
+	3) echo "Nothing";;
+	X) echo "Exit";;
+
+esac
+
+rm ${TEMPFILE}
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/input-box.sh
+Jan 20
+#########################################
+#########################################
+
+#!/bin/bash
+
+#demonstration of an input box for user input during a script
+
+
+###
+# VARIABLES SECTION #
+#####################
+INPUTBOX=${INPUTBOX=dialog}
+TITLE="Default"
+MESSAGE="Something to display"
+HEIGHT=10
+WIDTH=40
+TMPFILE=tmpfile.txt
+
+
+### 
+# FUNCTIONS SECTION #
+#####################
+
+funcDisplayInputBox () {
+	$INPUTBOX --title "$1" --inputbox "$2" "$3" "$4" 2>${TMPFILE}
+
+}
+
+
+
+###
+# SCRIPT SECTION #
+##################
+
+funcDisplayInputBox "Display File Name" "which file in the current directory $(pwd)/ do you want to display?" "${HEIGHT}" "${WIDTH}"
+
+if [ "$(cat ${TMPFILE})" != "" ]
+then
+	cat "$(cat ${TMPFILE})"
+else
+	echo "Nothing to do"
+fi
+
+rm ${TMPFILE}
+
+
+
+
+#########################################
+#########################################
+File /home/cloud_user/bin/override.sh
+Jan 20
+#########################################
+#########################################
+
+#!/bin/bash
+
+#override/trap the system exit and execute a custom function
+
+###
+# VARIABLE SECTION #
+####################
+
+TMP="tempfile.txt"
+TMP2="tempfile2.txt"
+
+trap 'funcMyExit' EXIT
+
+###
+# FUNCTION SECTION #
+####################
+
+#run this exit, instead of default exit when called
+
+funcMyExit () {
+	echo "Exit intercepted"
+	echo "Cleaning up temp files"
+	rm -rf temp*.txt
+	exit 255
+}
+
+
+###
+# SCRIPT SECTION #
+##################
+
+echo "Write something to the tmp file for later use..." > $TMP
+echo "Write something to the tmp2 file for later use..." > $TMP2
+
+cp -rf $1 newfile.txt 2>/dev/null
+
+if [ "$?" -eq "0" ]
+then
+	echo "Everything worked out okay"
+else
+	echo "I guess it did not work okay..."
+	exit 1
+fi
+
+
